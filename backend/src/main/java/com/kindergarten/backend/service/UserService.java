@@ -5,6 +5,9 @@ import com.kindergarten.backend.entity.User;
 import com.kindergarten.backend.repository.UserRepository;
 import jakarta.annotation.PostConstruct;          // Выполняется после создания сервиса
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;  // Для шифрования паролей
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

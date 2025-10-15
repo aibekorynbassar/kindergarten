@@ -132,6 +132,10 @@
 		{/if}
 	</section>
 
+	<section class="staff mb-12">
+		<h2 class="mb-6 text-center text-3xl font-bold text-gray-800">Преподователи</h2>
+	</section>
+
 	<!-- Форма обратной связи -->
 
 	<section class="feedback mb-8">
