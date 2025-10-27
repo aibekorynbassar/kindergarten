@@ -2,6 +2,7 @@
 	// @ts-nocheck
 	import * as newsAPI from '$lib/api/newsAPI.js';
 	import * as feedbackAPI from '$lib/api/feedbackAPI.js';
+	import * as staffAPI from '$lib/api/staffAPI.js';
 	import { userStore } from '$lib/stores/userStore.js';
 	import { goto } from '$app/navigation';
 
@@ -24,6 +25,11 @@
 	};
 
 	let user = { isLoggedIn: false, role: 'USER' };
+
+	let staff = [];
+	let staffCreateForm = false;
+	let editingStaff = null;
+	let newStaff = { name: '', profession: '', imageUrl: '' };
 
 	// Подписываемся на изменения пользователя
 	userStore.subscribe((value) => {
@@ -58,6 +64,7 @@
 		if (tab === 'feedback' && feedbackList.length === 0) {
 			loadFeedback();
 		}
+		if (tab === 'staff' && staff.length === 0) loadStaff();
 	}
 
 	// Создание новой новости
@@ -121,6 +128,34 @@
 	function formatDate(dateString) {
 		return new Date(dateString).toLocaleString('ru-RU');
 	}
+
+	async function loadStaff() {
+		staff = await staffAPI.getAllStaff();
+	}
+
+	async function createStaff() {
+		await staffAPI.createStaff(newStaff);
+		newStaff = { name: '', profession: '', imageUrl: '' };
+		staffCreateForm = false;
+		await loadStaff();
+	}
+
+	async function staffEditing(teacher) {
+		editingStaff = { ...teacher };
+	}
+
+	async function updateStaff() {
+		await staffAPI.updateStaff(editingStaff.id, editingStaff);
+		editingStaff = null;
+		await loadStaff();
+	}
+
+	async function deleteStaff(id) {
+		if (confirm('Удалить этого преподавателя?')) {
+			await staffAPI.deleteStaff(id);
+			await loadStaff();
+		}
+	}
 </script>
 
 <svelte:head>
@@ -148,6 +183,14 @@
 					: 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'}"
 			>
 				Обратная связь ({feedbackList.length})
+			</button>
+			<button
+				on:click={() => switchTab('staff')}
+				class="border-b-2 px-1 py-2 text-sm font-medium {activeTab === 'staff'
+					? 'border-blue-500 text-blue-600'
+					: 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'}"
+			>
+				Преподователи
 			</button>
 		</nav>
 	</div>
@@ -359,6 +402,134 @@
 					</div>
 				{/each}
 			{/if}
+		</div>
+	{:else if activeTab === 'staff'}
+		<div class="staff-tab">
+			<h3 class="mb-4 text-xl font-semibold">Управление преподавателями</h3>
+
+			<!-- Кнопка добавить -->
+			<div class="mb-4">
+				<button
+					class="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+					on:click={() => (staffCreateForm = !staffCreateForm)}
+				>
+					{staffCreateForm ? 'Отмена' : 'Добавить преподавателя'}
+				</button>
+			</div>
+
+			<!-- Форма добавления -->
+			{#if staffCreateForm}
+				<div class="create-form mb-6 rounded bg-gray-100 p-4">
+					<h3 class="mb-4 text-lg font-semibold">Создать преподавателя</h3>
+
+					<input
+						bind:value={newStaff.name}
+						placeholder="ФИО"
+						class="mb-3 w-full rounded border p-2"
+					/>
+					<input
+						bind:value={newStaff.profession}
+						placeholder="Должность"
+						class="mb-3 w-full rounded border p-2"
+					/>
+					<input
+						bind:value={newStaff.imageUrl}
+						placeholder="URL фотографии"
+						class="mb-3 w-full rounded border p-2"
+					/>
+
+					<button
+						on:click={createStaff}
+						class="rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+					>
+						Создать
+					</button>
+				</div>
+			{/if}
+
+			<!-- Форма редактирования -->
+			{#if editingStaff}
+				<div class="edit-form mb-6 rounded bg-yellow-100 p-4">
+					<h3 class="mb-4 text-lg font-semibold">Редактировать преподавателя</h3>
+
+					<input
+						bind:value={editingStaff.name}
+						placeholder="ФИО"
+						class="mb-3 w-full rounded border p-2"
+					/>
+					<input
+						bind:value={editingStaff.profession}
+						placeholder="Должность"
+						class="mb-3 w-full rounded border p-2"
+					/>
+					<input
+						bind:value={editingStaff.imageUrl}
+						placeholder="URL фотографии"
+						class="mb-3 w-full rounded border p-2"
+					/>
+
+					<div class="space-x-2">
+						<button
+							on:click={updateStaff}
+							class="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+						>
+							Сохранить
+						</button>
+						<button
+							on:click={() => (editingStaff = null)}
+							class="rounded bg-gray-500 px-4 py-2 text-white hover:bg-gray-600"
+						>
+							Отмена
+						</button>
+					</div>
+				</div>
+			{/if}
+
+			<!-- Таблица -->
+			<div class="staff-list">
+				<h3 class="mb-4 text-lg font-semibold">Все преподаватели</h3>
+
+				{#if staff.length === 0}
+					<p>Преподавателей пока нет</p>
+				{:else}
+					{#each staff as teacher}
+						<div
+							class="staff-item mb-3 flex items-center justify-between rounded border bg-white p-4"
+						>
+							<div class="flex items-center space-x-4">
+								<img
+									src={teacher.imageUrl || '/images/defaultStaff.jpg'}
+									alt={teacher.name}
+									class="h-16 w-16 rounded-full border object-cover"
+									on:error={(e) => {
+										if (e.target.src.includes('defaultStaff.jpg')) return;
+										e.target.src = '/images/defaultStaff.jpg';
+									}}
+								/>
+								<div>
+									<p class="font-semibold text-gray-800">{teacher.name}</p>
+									<p class="text-sm text-gray-500">{teacher.profession}</p>
+								</div>
+							</div>
+
+							<div class="flex space-x-3">
+								<button
+									class="text-blue-500 hover:underline"
+									on:click={() => staffEditing(teacher)}
+								>
+									Изменить
+								</button>
+								<button
+									class="text-red-500 hover:underline"
+									on:click={() => deleteStaff(teacher.id)}
+								>
+									Удалить
+								</button>
+							</div>
+						</div>
+					{/each}
+				{/if}
+			</div>
 		</div>
 	{/if}
 </div>
