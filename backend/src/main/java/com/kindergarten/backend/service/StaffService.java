@@ -58,10 +58,10 @@ public class StaffService {
 
     private Staff convertToEntity(StaffDto staffDto) {
         Staff staff = new Staff();
-        staff.setId(staff.getId());
-        staff.setName(staff.getName());
-        staff.setImageUrl(staff.getImageUrl());
-        staff.setProfession(staff.getProfession());
+        staff.setId(staffDto.getId());
+        staff.setName(staffDto.getName());
+        staff.setImageUrl(staffDto.getImageUrl());
+        staff.setProfession(staffDto.getProfession());
         return staff;
     }
 }
