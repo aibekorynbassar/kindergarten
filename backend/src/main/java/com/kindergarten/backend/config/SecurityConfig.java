@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .userDetailsService(userDetailsService)
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/auth/register", "/login", "/api/auth/checker", "/api/published_news", "/api/feedback").permitAll()
+                        .requestMatchers("/api/auth/**", "/login", "/api/published_news", "/api/feedback", "api/staff").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

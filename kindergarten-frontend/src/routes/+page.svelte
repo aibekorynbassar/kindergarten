@@ -4,6 +4,7 @@
 	import { getPublishedNews } from '$lib/api/newsAPI.js';
 	import { checkAuth } from '$lib/api/auth.js';
 	import FeedbackForm from '$lib/components/FeedbackForm.svelte';
+	import StaffList from '$lib/components/StaffList.svelte';
 
 	// Переменные для хранения данных
 	let news = []; // Список новостей
@@ -131,6 +132,8 @@
 			</div>
 		{/if}
 	</section>
+
+		<StaffList />
 
 	<!-- Форма обратной связи -->
 
