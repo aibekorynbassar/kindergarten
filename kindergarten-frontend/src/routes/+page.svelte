@@ -133,7 +133,7 @@
 		{/if}
 	</section>
 
-		<StaffList />
+	<StaffList />
 
 	<!-- Форма обратной связи -->
 
@@ -146,8 +146,27 @@
 			</p>
 		</div>
 
-		<div class="mx-auto max-w-2xl">
-			<FeedbackForm />
+		<div class="mx-auto w-full max-w-6xl">
+			<div class="grid items-start gap-6 md:grid-cols-2">
+				<div class="order-1">
+					<iframe
+						class="w-full h-[400px] md:h-[600px] rounded-md border shadow-sm"
+						title="Интерактивная карта — 2GIS"
+						id="map_737070700"
+						frameborder="0"
+						width="100%"
+						height="600px"
+						src="https://makemap.2gis.ru/widget?data=eJw9Ul2PojAU_S_dxzGz5UvEZB8QMohbkQ9nETfzgLSLYKEEK6LG_74V3W3StL3n3pvTc-4NsBaTlmCHsIrwtiBHMP19A_zSEDAFHyTlp5aAEWha1pCWD7iAC04feFhRNfoV5PDnPODYMSFCwclzZqIAk2PWFg0vWC0S_bn5Bhdt0HFrAtH3sPScFUzQq6h7neuQFnbA-aqBSAm4Z0kwWU62Fa3xZkH9nOWu3Te7OMszZVH60YLheXjOrqxD8kFD9YztlLBD5aJON8tTIhscKa9YjPc7p6dZfei2VVgklat565wv10nvRRAm17BAsdt75Sf3ShMu1x_lygnOSzlRN9dE8ur86tnmKa1ntfvgYZnDxjI9YCc33NI9Ly1X8Aq1nfNpuNWepjFm2G72eBN2q4ubJ3EP_QgFFbfOMFkHPLLDPLKDI7dU8fdBG9ezDIjMHCJfvB-a6AG33DerPHf_dRD3zFZ_CJEzRlkr5P0GZSX9I4vI1a0x6cFUgv_WfQTyp7mXwbqnsz4raj50EANQ1CkfjNf0d0mTdXU80uC7bEygZnyJ-gKD6UTT7l8jUKWNz47F09YboCkH02eupCiSJOmGrkojQB_wq9tYlwRojFVD0GOsEuQmoqkYD0ZpvCeEbocob0_k_hfvjtOQ"
+						sandbox="allow-modals allow-forms allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation"
+					></iframe>
+				</div>
+
+				<div class="order-2 flex justify-end">
+					<div class="w-full md:w-[520px]">
+						<FeedbackForm />
+					</div>
+				</div>
+			</div>
 		</div>
 	</section>
 </div>
