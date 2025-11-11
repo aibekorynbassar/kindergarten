@@ -1,3 +1,60 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+
+/* ---- стили для карточки новостей (изменить отображение картинок) ---- */
+.news-media {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+}
+
+/* плитка вокруг картинки, чтобы картинка была полностью видна */
+.tile{
+  border-radius: 8px;
+  overflow: hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:160px; /* регулируй по высоте карточки */
+  background:#fff;
+  padding:6px;
+}
+
+/* картинка показывает всё — no crop */
+.tile img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;          /* <--- важно: показывает всё изображение */
+  display:block;
+  transition: transform .28s ease, filter .22s ease;
+  transform-origin: center center;
+}
+
+/* затемняющий слой (появляется при hover по карточке) */
+.news-media-overlay{
+  position:absolute;
+  inset: 12px 12px auto 12px; /* подгоняй если padding у карточки другой */
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  bottom: calc(100% - (12px + 160px)); /* высоту подстраивай под min-height плитки */
+  pointer-events: none;
+  transition: background .22s ease;
+  border-radius: 10px;
+}
+
+/* hover — когда курсор над карточкой */
+.news-card:hover .news-media-overlay {
+  background: rgba(0,0,0,0.08);
+}
+.news-card:hover .tile img{
+  transform: scale(1.06);
+  filter: brightness(.94);
+}
+
+/* адаптив: на телефоне меньше высота плитки */
+@media (max-width: 420px) {
+  .tile { min-height:110px; }
+  .news-media-overlay{ bottom: calc(100% - (12px + 110px)); }
+}
