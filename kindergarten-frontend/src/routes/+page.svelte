@@ -244,7 +244,13 @@
 		</div>
 	</section>
 </div>
-
+<footer class="bg-blue-600 py-6 text-center text-white">
+	<p>&copy; {new Date().getFullYear()} Детский сад "Солнышко". Все права защищены.
+	<br>
+	" Разработка сайтов: "
+	<a href="https://fixit-servis.kz/разработка-сайтов/">FIXIT Service</a>
+	</p>
+</footer>
 <style>
 	.container {
 		max-width: 1440px;
